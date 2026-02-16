@@ -1,4 +1,4 @@
-# Stock Analyzer React
+# Stock_Analyzer 
 
 A comprehensive stock analysis platform built with React, featuring real-time data, technical indicators, portfolio management, and advanced charting.
 
@@ -13,14 +13,3 @@ A comprehensive stock analysis platform built with React, featuring real-time da
 - 📱 Fully responsive design
 - 🌙 Dark/Light theme support
 
-## Getting Started
-
-### Prerequisites
-- Node.js 16+ 
-- npm or yarn
-
-### Installation
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/stock-analyzer-react.git
-cd stock-analyzer-react
