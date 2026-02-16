@@ -1,0 +1,132 @@
+.App {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a1929 0%, #1a3a5f 100%);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Custom classes */
+.glass-effect {
+  background: rgba(19, 47, 76, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .MuiContainer-root {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+/* Chart tooltip customization */
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+/* src/App.css - Add light mode support */
+
+/* Light mode body styles */
+body.light-mode {
+  background-color: #f5f7fa;
+  color: #1a2634;
+}
+
+/* Dark mode body styles */
+body.dark-mode {
+  background-color: #0a1929;
+  color: #ffffff;
+}
+
+/* Smooth theme transition */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode card adjustments */
+.light-mode .MuiCard-root {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+/* Dark mode card adjustments */
+.dark-mode .MuiCard-root {
+  background-color: #132f4c;
+  border: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+/* Chart text colors for light mode */
+.light-mode .recharts-text {
+  fill: #1a2634 !important;
+}
+
+.light-mode .recharts-cartesian-grid line {
+  stroke: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Animation for theme toggle */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.theme-toggle-icon {
+  animation: rotate 0.5s ease;
+}

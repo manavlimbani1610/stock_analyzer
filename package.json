@@ -1,0 +1,59 @@
+{
+  "name": "stock-analyzer-react",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^3.10.0",
+    "@mui/icons-material": "^5.18.0",
+    "@mui/material": "^5.18.0",
+    "@mui/x-data-grid": "^6.20.4",
+    "@mui/x-date-pickers": "^6.20.2",
+    "@tanstack/react-query": "^5.90.21",
+    "axios": "^1.13.5",
+    "bcryptjs": "^3.0.3",
+    "date-fns": "^3.6.0",
+    "framer-motion": "^12.34.0",
+    "jsonwebtoken": "^9.0.3",
+    "jwt-decode": "^4.0.0",
+    "react": "^18.2.0",
+    "react-cookie": "^8.0.1",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.71.1",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^6.30.3",
+    "recharts": "^2.15.4",
+    "web-vitals": "^5.1.0",
+    "yup": "^1.7.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "deploy": "npm run build && surge build/ https://stock-analyzer-react.surge.sh",
+    "deploy:netlify": "npm run build && netlify deploy --prod",
+    "deploy:vercel": "vercel --prod"
+  },
+  "devDependencies": {
+    "react-scripts": "5.0.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+/* Global Styles */
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection */
+::selection {
+  background-color: #00d4ff;
+  color: white;
+}
+
+::-moz-selection {
+  background-color: #00d4ff;
+  color: white;
+}
+
+/* Custom scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #00d4ff #1e1e1e;
+}
+
+/* Chart tooltip styles */
+.recharts-tooltip-wrapper {
+  z-index: 1000;
+}
+
+.recharts-default-tooltip {
+  background-color: rgba(19, 47, 76, 0.95) !important;
+  border: 1px solid #00d4ff !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: -100px;
+  }
+  100% {
+    background-position: 200px;
+  }
+}
+
+.shine {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200px 100%;
+  animation: shine 2s infinite;
+}
+
+/* Utility classes */
+.text-gradient {
+  background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass {
+  background: rgba(19, 47, 76, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive text */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.5rem !important;
+  }
+  h2 {
+    font-size: 1.25rem !important;
+  }
+  h3 {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --primary-color: #00d4ff;
+    --secondary-color: #ff6b6b;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
