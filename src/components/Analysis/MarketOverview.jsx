@@ -55,15 +55,17 @@ const MarketOverview = () => {
 
   const MarketCard = ({ title, data, symbol }) => (
     <Card>
-      <CardContent>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-          <Typography variant="body2" color="text.secondary">{title}</Typography>
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5, textAlign: 'center', p: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ letterSpacing: 0.2 }}>
+            {title}
+          </Typography>
           <ShowChartIcon fontSize="small" sx={{ color: '#00d4ff' }} />
         </Box>
-        <Typography variant="h6" fontWeight="bold">
+        <Typography variant="h6" fontWeight="bold" sx={{ fontSize: 20 }}>
           ${data?.price?.toFixed(2) || '---'}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.4 }}>
           {data?.change >= 0 ? (
             <TrendingUpIcon sx={{ color: 'success.main', fontSize: 16 }} />
           ) : (
@@ -73,12 +75,13 @@ const MarketOverview = () => {
             variant="caption" 
             color={data?.change >= 0 ? 'success.main' : 'error.main'}
             fontWeight="medium"
+            sx={{ fontSize: 12 }}
           >
             {data?.change >= 0 ? '+' : ''}{data?.change?.toFixed(2)} 
             ({data?.change >= 0 ? '+' : ''}{data?.changePercent?.toFixed(2)}%)
           </Typography>
         </Box>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+        <Typography variant="caption" color="text.secondary" sx={{ mt: 0.25, fontSize: 12 }}>
           {symbol}
         </Typography>
       </CardContent>

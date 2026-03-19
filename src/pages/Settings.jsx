@@ -159,6 +159,7 @@ const Settings = () => {
   const saveSettings = async () => {
     // Save to localStorage
     localStorage.setItem('appSettings', JSON.stringify(settings));
+    window.dispatchEvent(new CustomEvent('appSettingsUpdated', { detail: settings }));
     
     // Save to user profile if logged in
     if (user) {
@@ -220,6 +221,7 @@ const Settings = () => {
     setSettings(defaultSettings);
     setTempSymbols(defaultSettings.defaultSymbols);
     localStorage.setItem('appSettings', JSON.stringify(defaultSettings));
+    window.dispatchEvent(new CustomEvent('appSettingsUpdated', { detail: defaultSettings }));
     
     if (user) {
       updateSettings(defaultSettings);
@@ -275,6 +277,7 @@ const Settings = () => {
         setSettings(prev => ({ ...prev, ...imported }));
         setTempSymbols(imported.defaultSymbols || settings.defaultSymbols);
         localStorage.setItem('appSettings', JSON.stringify(imported));
+        window.dispatchEvent(new CustomEvent('appSettingsUpdated', { detail: imported }));
         
         if (user) {
           updateSettings(imported);

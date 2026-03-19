@@ -3,7 +3,7 @@ import React, { Suspense, lazy, useEffect } from 'react';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { CookiesProvider } from 'react-cookie';
 import { AnimatePresence } from 'framer-motion';
@@ -51,6 +51,58 @@ const ScrollToTop = () => {
 };
 
 // Main App Content with dynamic theme
+const AppRoutes = () => {
+  const location = useLocation();
+  const isAuthRoute = location.pathname === '/login';
+
+  return (
+    <>
+      {isAuthRoute ? (
+        <Suspense fallback={<LoadingSkeleton />}>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </Suspense>
+      ) : (
+        <Layout>
+          <Suspense fallback={<LoadingSkeleton />}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/portfolio" element={
+                <ProtectedRoute>
+                  <Portfolio />
+                </ProtectedRoute>
+              } />
+              <Route path="/analysis/*" element={
+                <ProtectedRoute>
+                  <Analysis />
+                </ProtectedRoute>
+              } />
+              <Route path="/settings" element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              } />
+              <Route path="/test" element={
+                <ProtectedRoute>
+                  <TestAPI />
+                </ProtectedRoute>
+              } />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </Layout>
+      )}
+    </>
+  );
+};
+
 const AppContent = () => {
   const { darkMode } = useTheme();
   const theme = getTheme(darkMode ? 'dark' : 'light');
@@ -61,42 +113,7 @@ const AppContent = () => {
       <Router>
         <ScrollToTop />
         <AnimatePresence mode="wait">
-          <Layout>
-            <Suspense fallback={<LoadingSkeleton />}>
-              <Routes>
-                {/* Public Route */}
-                <Route path="/login" element={<Login />} />
-                
-                {/* Protected Routes */}
-                <Route path="/" element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/portfolio" element={
-                  <ProtectedRoute>
-                    <Portfolio />
-                  </ProtectedRoute>
-                } />
-                <Route path="/analysis/*" element={
-                  <ProtectedRoute>
-                    <Analysis />
-                  </ProtectedRoute>
-                } />
-                <Route path="/settings" element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                } />
-                <Route path="/test" element={
-                  <ProtectedRoute>
-                    <TestAPI />
-                  </ProtectedRoute>
-                } />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </Layout>
+          <AppRoutes />
         </AnimatePresence>
       </Router>
       

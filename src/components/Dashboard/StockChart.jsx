@@ -62,12 +62,52 @@ const StockChart = () => {
   const [isChanging, setIsChanging] = useState(false);
   const [chartKey, setChartKey] = useState(Date.now());
   const isMounted = useRef(true);
+  const [chartColorsSetting, setChartColorsSetting] = useState('professional');
+
+  const chartPalettes = useMemo(() => ({
+    professional: ['#00d4ff', '#ff6b6b', '#4caf50', '#ff9800'],
+    vibrant: ['#ff7b00', '#00c49f', '#a333c8', '#ff4d6d']
+  }), []);
+
+  const primaryStroke = chartPalettes[chartColorsSetting]?.[0] || '#00d4ff';
 
   // Cleanup on unmount
   useEffect(() => {
     isMounted.current = true;
     return () => {
       isMounted.current = false;
+    };
+  }, []);
+
+  // Listen for settings updates (e.g., chartColors)
+  useEffect(() => {
+    const loadSetting = () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem('appSettings') || '{}');
+        if (saved.chartColors) {
+          setChartColorsSetting(saved.chartColors);
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    loadSetting();
+
+    const handleSettingsEvent = (e) => {
+      if (e?.detail?.chartColors) {
+        setChartColorsSetting(e.detail.chartColors);
+      } else {
+        loadSetting();
+      }
+    };
+
+    window.addEventListener('appSettingsUpdated', handleSettingsEvent);
+    window.addEventListener('storage', loadSetting);
+
+    return () => {
+      window.removeEventListener('appSettingsUpdated', handleSettingsEvent);
+      window.removeEventListener('storage', loadSetting);
     };
   }, []);
 
@@ -482,19 +522,19 @@ const StockChart = () => {
                 />
                 <defs>
                   <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#00d4ff" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#00d4ff" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={primaryStroke} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={primaryStroke} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <Area
                   type="monotone"
                   dataKey="close"
-                  stroke="#00d4ff"
+                  stroke={primaryStroke}
                   fill="url(#colorPrice)"
                   strokeWidth={2}
                   name="Price"
                   dot={false}
-                  activeDot={{ r: 6, fill: '#00d4ff', stroke: '#fff' }}
+                  activeDot={{ r: 6, fill: primaryStroke, stroke: '#fff' }}
                 />
                 {indicators?.movingAverage && (
                   <>
@@ -622,11 +662,11 @@ const StockChart = () => {
                 <Line
                   type="monotone"
                   dataKey="close"
-                  stroke="#00d4ff"
+                  stroke={primaryStroke}
                   strokeWidth={3}
                   dot={false}
                   name="Price"
-                  activeDot={{ r: 6, fill: '#00d4ff', stroke: '#fff' }}
+                  activeDot={{ r: 6, fill: primaryStroke, stroke: '#fff' }}
                 />
                 {indicators?.movingAverage && (
                   <>

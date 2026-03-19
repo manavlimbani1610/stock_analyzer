@@ -38,6 +38,7 @@ import {
 } from '@mui/icons-material';
 import { useStock } from '../../context/StockContext';
 import { format } from 'date-fns';
+import { calculateRSI, calculateBollingerBands } from '../../services/technicalIndicators';
 
 const TechnicalIndicators = () => {
   const { 
@@ -56,10 +57,19 @@ const TechnicalIndicators = () => {
   const [bbPeriod, setBbPeriod] = useState(20);
   const [showSignals, setShowSignals] = useState(true);
 
+  const maxRsiPeriod = Math.max(5, Math.min(25, stockData?.length || 25));
+  const maxBbPeriod = Math.max(10, Math.min(50, stockData?.length || 50));
+  const effectiveRsiPeriod = Math.min(rsiPeriod, maxRsiPeriod);
+  const effectiveBbPeriod = Math.min(bbPeriod, maxBbPeriod);
+
+  // Recompute indicators based on slider periods
+  const dynamicRsiData = useMemo(() => calculateRSI(stockData || [], effectiveRsiPeriod), [stockData, effectiveRsiPeriod]);
+  const dynamicBbData = useMemo(() => calculateBollingerBands(stockData || [], effectiveBbPeriod), [stockData, effectiveBbPeriod]);
+
   // Filter RSI data based on period
   const filteredRsiData = useMemo(() => {
-    return rsiData.slice(-30); // Last 30 days
-  }, [rsiData]);
+    return dynamicRsiData.slice(-30); // Last 30 days
+  }, [dynamicRsiData]);
 
   // Filter MACD data
   const filteredMacdData = useMemo(() => {
@@ -68,11 +78,11 @@ const TechnicalIndicators = () => {
 
   // Filter Bollinger Bands data
   const filteredBbData = useMemo(() => {
-    return bbData.slice(-30); // Last 30 days
-  }, [bbData]);
+    return dynamicBbData.slice(-30); // Last 30 days
+  }, [dynamicBbData]);
 
   // Get current RSI value and signal
-  const currentRSI = rsiData.length > 0 ? rsiData[rsiData.length - 1].rsi : 50;
+  const currentRSI = dynamicRsiData.length > 0 ? dynamicRsiData[dynamicRsiData.length - 1].rsi : 50;
   const rsiSignal = currentRSI > 70 ? 'Overbought' : currentRSI < 30 ? 'Oversold' : 'Neutral';
   const rsiColor = currentRSI > 70 ? '#f44336' : currentRSI < 30 ? '#4caf50' : '#ff9800';
 
@@ -82,7 +92,7 @@ const TechnicalIndicators = () => {
   const macdColor = currentMACD?.macd > currentMACD?.signal ? '#4caf50' : '#f44336';
 
   // Get current Bollinger Bands position
-  const currentBB = bbData.length > 0 ? bbData[bbData.length - 1] : null;
+  const currentBB = dynamicBbData.length > 0 ? dynamicBbData[dynamicBbData.length - 1] : null;
   let bbSignal = 'Neutral';
   let bbColor = '#ff9800';
   if (currentBB) {
@@ -270,13 +280,13 @@ const TechnicalIndicators = () => {
               <Typography variant="h6">RSI (Relative Strength Index)</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Typography variant="body2" color="text.secondary">
-                  Period: {rsiPeriod}
+                  Period: {effectiveRsiPeriod}
                 </Typography>
                 <Slider
-                  value={rsiPeriod}
-                  onChange={(e, v) => setRsiPeriod(v)}
+                  value={effectiveRsiPeriod}
+                  onChange={(e, v) => setRsiPeriod(Math.min(v, maxRsiPeriod))}
                   min={5}
-                  max={25}
+                  max={maxRsiPeriod}
                   step={1}
                   sx={{ width: 120 }}
                   size="small"
@@ -385,13 +395,13 @@ const TechnicalIndicators = () => {
               <Typography variant="h6">Bollinger Bands</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Typography variant="body2" color="text.secondary">
-                  Period: {bbPeriod}
+                  Period: {effectiveBbPeriod}
                 </Typography>
                 <Slider
-                  value={bbPeriod}
-                  onChange={(e, v) => setBbPeriod(v)}
+                  value={effectiveBbPeriod}
+                  onChange={(e, v) => setBbPeriod(Math.min(v, maxBbPeriod))}
                   min={10}
-                  max={50}
+                  max={maxBbPeriod}
                   step={1}
                   sx={{ width: 120 }}
                   size="small"

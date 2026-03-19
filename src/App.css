@@ -1,6 +1,13 @@
 .App {
   min-height: 100vh;
+}
+
+body.dark-mode .App {
   background: linear-gradient(135deg, #0a1929 0%, #1a3a5f 100%);
+}
+
+body.light-mode .App {
+  background: linear-gradient(135deg, #e8f1fb 0%, #cfe5ff 100%);
 }
 
 /* Animations */

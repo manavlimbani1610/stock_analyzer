@@ -127,11 +127,11 @@ const StockComparison = () => {
   }, []);
 
   // Fetch complete stock data including historical
-  const fetchCompleteStockData = async (symbol) => {
+  const fetchCompleteStockData = async (symbol, tf) => {
     try {
       const [quote, historical] = await Promise.all([
         stockApi.getRealTimeQuote(symbol),
-        stockApi.getHistoricalData(symbol, timeframe)
+        stockApi.getHistoricalData(symbol, tf)
       ]);
       return { quote, historical };
     } catch (error) {
@@ -140,9 +140,10 @@ const StockComparison = () => {
     }
   };
 
-  const compareStocks = async () => {
+  const compareStocks = async (overrideTimeframe) => {
     setLoading(true);
     setError(null);
+    const tf = overrideTimeframe || timeframe;
     
     try {
       const stocksToFetch = comparisonMode === 'two' 
@@ -150,7 +151,7 @@ const StockComparison = () => {
         : [stock1, stock2, stock3, stock4];
       
       const results = await Promise.all(
-        stocksToFetch.map(symbol => fetchCompleteStockData(symbol))
+        stocksToFetch.map(symbol => fetchCompleteStockData(symbol, tf))
       );
 
       const [result1, result2, result3, result4] = results;
@@ -567,30 +568,25 @@ const StockComparison = () => {
                 size="small"
                 icon={<Assessment />}
               />
-              <Chip
-                label="1M"
-                onClick={() => setTimeframe('1mo')}
-                color={timeframe === '1mo' ? 'primary' : 'default'}
-                size="small"
-              />
-              <Chip
-                label="3M"
-                onClick={() => setTimeframe('3mo')}
-                color={timeframe === '3mo' ? 'primary' : 'default'}
-                size="small"
-              />
-              <Chip
-                label="6M"
-                onClick={() => setTimeframe('6mo')}
-                color={timeframe === '6mo' ? 'primary' : 'default'}
-                size="small"
-              />
-              <Chip
-                label="1Y"
-                onClick={() => setTimeframe('1y')}
-                color={timeframe === '1y' ? 'primary' : 'default'}
-                size="small"
-              />
+              {[
+                { label: '1M', value: '1mo' },
+                { label: '3M', value: '3mo' },
+                { label: '6M', value: '6mo' },
+                { label: '1Y', value: '1y' }
+              ].map(({ label, value }) => (
+                <Chip
+                  key={value}
+                  label={label}
+                  onClick={() => {
+                    setTimeframe(value);
+                    if (data1 && data2) {
+                      compareStocks(value);
+                    }
+                  }}
+                  color={timeframe === value ? 'primary' : 'default'}
+                  size="small"
+                />
+              ))}
             </Box>
           </Box>
         )}

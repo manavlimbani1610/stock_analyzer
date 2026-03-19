@@ -49,6 +49,14 @@ const QuickActions = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [shares, setShares] = useState(1);
   const [adding, setAdding] = useState(false);
+  const [backtestOpen, setBacktestOpen] = useState(false);
+  const [backtestLoading, setBacktestLoading] = useState(false);
+  const [backtestResult, setBacktestResult] = useState(null);
+  const [backtestInput, setBacktestInput] = useState({
+    investment: 1000,
+    start: '2023-01-01',
+    end: '2024-01-01',
+  });
 
   // Calculate quick stats from real data
   const quickStats = useMemo(() => {
@@ -257,9 +265,30 @@ const QuickActions = () => {
   };
 
   const handleBacktestStrategy = () => {
-    toast.success('📈 Backtest feature coming soon!', {
-      icon: '🚀',
-    });
+    setBacktestOpen(true);
+  };
+
+  const runBacktest = () => {
+    setBacktestLoading(true);
+
+    // Very light mock: simple annualized move using current quote change percent if available
+    const changePct = quote?.changePercent ?? 0;
+    const durationYears = 1;
+    const expectedReturn = changePct * durationYears;
+    const investment = Number(backtestInput.investment) || 0;
+    const finalValue = investment * (1 + expectedReturn / 100);
+
+    setTimeout(() => {
+      setBacktestResult({
+        investment,
+        finalValue: finalValue.toFixed(2),
+        returnPct: expectedReturn.toFixed(2),
+        start: backtestInput.start,
+        end: backtestInput.end,
+      });
+      setBacktestLoading(false);
+      toast.success('Backtest simulated');
+    }, 400);
   };
 
   const actions = [
@@ -432,96 +461,129 @@ const QuickActions = () => {
               border: '1px solid',
               borderColor: 'divider',
               height: '100%',
+              width: '100%',
+              boxSizing: 'border-box',
             }}>
-              <Typography variant="subtitle2" gutterBottom color="text.secondary" sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" gutterBottom color="text.secondary" sx={{ mb: 1.5, fontSize: 12, lineHeight: 1.2 }}>
                 Quick Stats - {selectedStock || 'N/A'}
               </Typography>
               
-              <Grid container spacing={2}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr',
+                  rowGap: 1,
+                  alignItems: 'start'
+                }}
+              >
                 {/* RSI */}
-                <Grid item xs={6}>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                      RSI (14)
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      {getStatusIcon(quickStats.rsiStatus)}
-                      <Typography 
-                        variant="body1" 
-                        fontWeight="bold"
-                        sx={{ color: getStatusColor(quickStats.rsiStatus) }}
-                      >
-                        {quickStats.rsi}
-                      </Typography>
-                    </Box>
-                    <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'capitalize' }}>
-                      {quickStats.rsiStatus}
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateRows: 'auto auto auto',
+                    rowGap: 0.35,
+                    minHeight: 72,
+                    justifyItems: 'flex-start'
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1.2, fontSize: 10 }}>
+                    RSI (14)
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, lineHeight: 1.2 }}>
+                    {getStatusIcon(quickStats.rsiStatus)}
+                    <Typography 
+                      variant="body2"
+                      fontWeight="bold"
+                      sx={{ color: getStatusColor(quickStats.rsiStatus), lineHeight: 1.1, fontSize: 12 }}
+                    >
+                      {quickStats.rsi}
                     </Typography>
                   </Box>
-                </Grid>
+                  <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'capitalize', lineHeight: 1.1, fontSize: 10 }}>
+                    {quickStats.rsiStatus}
+                  </Typography>
+                </Box>
 
                 {/* MACD */}
-                <Grid item xs={6}>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                      MACD
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      {getStatusIcon(quickStats.macdStatus)}
-                      <Typography 
-                        variant="body1" 
-                        fontWeight="bold"
-                        sx={{ color: getStatusColor(quickStats.macdStatus) }}
-                      >
-                        {quickStats.macd}
-                      </Typography>
-                    </Box>
-                    <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'capitalize' }}>
-                      {quickStats.macdStatus}
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateRows: 'auto auto auto',
+                    rowGap: 0.35,
+                    minHeight: 72,
+                    justifyItems: 'flex-start'
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1.2, fontSize: 10 }}>
+                    MACD
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, lineHeight: 1.2 }}>
+                    {getStatusIcon(quickStats.macdStatus)}
+                    <Typography 
+                      variant="body2"
+                      fontWeight="bold"
+                      sx={{ color: getStatusColor(quickStats.macdStatus), lineHeight: 1.1, fontSize: 12 }}
+                    >
+                      {quickStats.macd}
                     </Typography>
                   </Box>
-                </Grid>
+                  <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'capitalize', lineHeight: 1.1, fontSize: 10 }}>
+                    {quickStats.macdStatus}
+                  </Typography>
+                </Box>
 
                 {/* Volume */}
-                <Grid item xs={6}>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                      Volume
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      <ShowChartIcon sx={{ fontSize: 14, color: '#2196f3' }} />
-                      <Typography variant="body1" fontWeight="bold" sx={{ color: '#2196f3' }}>
-                        {quickStats.volume}
-                      </Typography>
-                    </Box>
-                    <Typography variant="caption" color="text.secondary">
-                      {quickStats.volumeStatus}
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateRows: 'auto auto auto',
+                    rowGap: 0.35,
+                    minHeight: 72,
+                    justifyItems: 'flex-start'
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1.2, fontSize: 10 }}>
+                    Volume
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, lineHeight: 1.2 }}>
+                    <ShowChartIcon sx={{ fontSize: 14, color: '#2196f3' }} />
+                    <Typography variant="body2" fontWeight="bold" sx={{ color: '#2196f3', lineHeight: 1.1, fontSize: 12 }}>
+                      {quickStats.volume}
                     </Typography>
                   </Box>
-                </Grid>
+                  <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.1, fontSize: 10 }}>
+                    {quickStats.volumeStatus}
+                  </Typography>
+                </Box>
 
                 {/* Volatility */}
-                <Grid item xs={6}>
-                  <Box>
-                    <Typography variant="caption" color="text.secondary" display="block">
-                      Volatility
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      <ShowChartIcon sx={{ fontSize: 14, color: getStatusColor(quickStats.volatilityStatus) }} />
-                      <Typography 
-                        variant="body1" 
-                        fontWeight="bold"
-                        sx={{ color: getStatusColor(quickStats.volatilityStatus) }}
-                      >
-                        {quickStats.volatility}
-                      </Typography>
-                    </Box>
-                    <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'capitalize' }}>
-                      {quickStats.volatilityStatus}
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateRows: 'auto auto auto',
+                    rowGap: 0.35,
+                    minHeight: 72,
+                    justifyItems: 'flex-start'
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary" display="block" sx={{ lineHeight: 1.2, fontSize: 10 }}>
+                    Volatility
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, lineHeight: 1.2 }}>
+                    <ShowChartIcon sx={{ fontSize: 14, color: getStatusColor(quickStats.volatilityStatus) }} />
+                    <Typography 
+                      variant="body2"
+                      fontWeight="bold"
+                      sx={{ color: getStatusColor(quickStats.volatilityStatus), lineHeight: 1.1, fontSize: 12 }}
+                    >
+                      {quickStats.volatility}
                     </Typography>
                   </Box>
-                </Grid>
-              </Grid>
+                  <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'capitalize', lineHeight: 1.1, fontSize: 10 }}>
+                    {quickStats.volatilityStatus}
+                  </Typography>
+                </Box>
+              </Box>
 
               {!quote && (
                 <Alert severity="info" sx={{ mt: 2, py: 0 }}>
@@ -532,6 +594,77 @@ const QuickActions = () => {
           </Grid>
         </Grid>
       </Paper>
+
+      {/* Backtest Dialog */}
+      <Dialog open={backtestOpen} onClose={() => !backtestLoading && setBacktestOpen(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <BarChartIcon color="primary" />
+            <Typography variant="h6">Quick Backtest</Typography>
+          </Box>
+        </DialogTitle>
+        <DialogContent sx={{ pb: 1 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Run a simple hypothetical return using the selected stock and your dates. (Mock calculation)
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Investment ($)"
+                type="number"
+                fullWidth
+                size="small"
+                value={backtestInput.investment}
+                onChange={(e) => setBacktestInput(prev => ({ ...prev, investment: e.target.value }))}
+                inputProps={{ min: 0 }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Start"
+                type="date"
+                fullWidth
+                size="small"
+                value={backtestInput.start}
+                onChange={(e) => setBacktestInput(prev => ({ ...prev, start: e.target.value }))}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="End"
+                type="date"
+                fullWidth
+                size="small"
+                value={backtestInput.end}
+                onChange={(e) => setBacktestInput(prev => ({ ...prev, end: e.target.value }))}
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+          </Grid>
+
+          {backtestResult && (
+            <Box sx={{ mt: 3, p: 2, borderRadius: 2, bgcolor: 'background.default', border: '1px solid', borderColor: 'divider' }}>
+              <Typography variant="subtitle2" gutterBottom>Result</Typography>
+              <Typography variant="body2">Investment: ${backtestResult.investment}</Typography>
+              <Typography variant="body2">Final Value: ${backtestResult.finalValue}</Typography>
+              <Typography variant="body2">Return: {backtestResult.returnPct}%</Typography>
+              <Typography variant="caption" color="text.secondary">Period: {backtestResult.start} → {backtestResult.end}</Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ p: 2.5 }}>
+          <Button onClick={() => setBacktestOpen(false)} disabled={backtestLoading}>Close</Button>
+          <Button
+            variant="contained"
+            onClick={runBacktest}
+            disabled={backtestLoading || !selectedStock}
+            startIcon={backtestLoading ? <CircularProgress size={18} /> : <BarChartIcon />}
+          >
+            {backtestLoading ? 'Running...' : 'Run Backtest'}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Add to Portfolio Dialog */}
       <Dialog open={openDialog} onClose={() => !adding && setOpenDialog(false)} maxWidth="sm" fullWidth>
