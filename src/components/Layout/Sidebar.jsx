@@ -22,6 +22,7 @@ import {
   ShowChart,
   Timeline,
   BarChart,
+  TrendingUp as PredictionIcon,
 } from '@mui/icons-material';  // ✅ Removed 'TrendingUp' from imports
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -35,6 +36,7 @@ const Sidebar = () => {
   const mainItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
     { text: 'Portfolio', icon: <PortfolioIcon />, path: '/portfolio' },
+    { text: 'Prediction', icon: <PredictionIcon />, path: '/prediction' },
   ];
 
   const analysisItems = [

@@ -1,0 +1,17 @@
+# Stock Prediction Backend Dependencies
+
+# Core
+flask==3.0.0
+flask-cors==4.0.0
+
+# Data & ML
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+yfinance>=0.2.31
+
+# Optional: TensorFlow for LSTM (comment out if not needed)
+# tensorflow>=2.13.0
+
+# Utilities
+python-dotenv>=1.0.0

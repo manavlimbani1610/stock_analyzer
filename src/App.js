@@ -22,6 +22,7 @@ import './App.css';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Portfolio = lazy(() => import('./pages/Portfolio'));
 const Analysis = lazy(() => import('./pages/Analysis'));
+const Prediction = lazy(() => import('./pages/Prediction'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Login = lazy(() => import('./pages/Login'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -82,6 +83,11 @@ const AppRoutes = () => {
               <Route path="/analysis/*" element={
                 <ProtectedRoute>
                   <Analysis />
+                </ProtectedRoute>
+              } />
+              <Route path="/prediction" element={
+                <ProtectedRoute>
+                  <Prediction />
                 </ProtectedRoute>
               } />
               <Route path="/settings" element={
