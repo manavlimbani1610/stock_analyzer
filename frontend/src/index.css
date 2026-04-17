@@ -1,0 +1,884 @@
+/* ==========================================================================
+   Stock Analyzer - CSS Variable Theme System
+   Professional Trading Dashboard Styling
+   ========================================================================== */
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Theme Variables - Light Mode (Default)
+   ========================================================================== */
+:root,
+[data-theme="light"] {
+  /* Primary Colors */
+  --color-primary: #0099cc;
+  --color-primary-light: #00bfff;
+  --color-primary-dark: #007399;
+  --color-primary-contrast: #ffffff;
+
+  /* Secondary Colors */
+  --color-secondary: #ff6b6b;
+  --color-secondary-light: #ff9e9e;
+  --color-secondary-dark: #cc5252;
+
+  /* Backgrounds */
+  --bg-primary: #f0f4f8;
+  --bg-secondary: #ffffff;
+  --bg-paper: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-hover: rgba(0, 153, 204, 0.08);
+  --bg-selected: rgba(0, 153, 204, 0.15);
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --bg-tooltip: rgba(255, 255, 255, 0.95);
+  --bg-modal: rgba(255, 255, 255, 0.95);
+  --bg-skeleton: rgba(0, 0, 0, 0.06);
+
+  /* Text Colors */
+  --text-primary: #1a2634;
+  --text-secondary: #5f6b7a;
+  --text-muted: #8a94a3;
+  --text-disabled: #b8c0cc;
+  --text-contrast: #ffffff;
+
+  /* Borders */
+  --border-color: #e1e5eb;
+  --border-color-light: rgba(0, 0, 0, 0.08);
+  --border-color-focus: #0099cc;
+  --border-radius: 12px;
+  --border-radius-sm: 8px;
+  --border-radius-lg: 16px;
+
+  /* Dividers */
+  --divider-color: rgba(0, 0, 0, 0.08);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 8px 30px rgba(0, 153, 204, 0.15);
+
+  /* Status Colors */
+  --color-success: #00c853;
+  --color-success-light: #69f0ae;
+  --color-success-bg: rgba(0, 200, 83, 0.1);
+  --color-error: #ff1744;
+  --color-error-light: #ff616f;
+  --color-error-bg: rgba(255, 23, 68, 0.1);
+  --color-warning: #ff9100;
+  --color-warning-light: #ffc246;
+  --color-warning-bg: rgba(255, 145, 0, 0.1);
+  --color-info: #2979ff;
+  --color-info-light: #75a7ff;
+  --color-info-bg: rgba(41, 121, 255, 0.1);
+
+  /* Trading Colors */
+  --color-profit: #00c853;
+  --color-loss: #ff1744;
+  --color-neutral: #5f6b7a;
+
+  /* Chart Colors */
+  --chart-bg: #ffffff;
+  --chart-grid: rgba(0, 0, 0, 0.1);
+  --chart-axis: #5f6b7a;
+  --chart-text: #1a2634;
+  --chart-line-primary: #0099cc;
+  --chart-area-fill: rgba(0, 153, 204, 0.2);
+  --chart-candle-up: #00c853;
+  --chart-candle-down: #ff1744;
+  --chart-volume: rgba(136, 132, 216, 0.5);
+
+  /* Sidebar */
+  --sidebar-bg: #ffffff;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-item-hover: rgba(0, 153, 204, 0.06);
+  --sidebar-item-active: rgba(0, 153, 204, 0.12);
+
+  /* Header / Navbar */
+  --header-bg: #ffffff;
+  --header-border: rgba(0, 0, 0, 0.08);
+  --header-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: rgba(0, 0, 0, 0.15);
+  --input-border-hover: rgba(0, 153, 204, 0.5);
+  --input-border-focus: #0099cc;
+  --input-placeholder: #8a94a3;
+
+  /* Buttons */
+  --button-primary-bg: linear-gradient(135deg, #0099cc 0%, #007399 100%);
+  --button-primary-hover: linear-gradient(135deg, #00bfff 0%, #0099cc 100%);
+  --button-secondary-bg: transparent;
+  --button-secondary-border: #0099cc;
+  --button-shadow: 0 2px 10px rgba(0, 153, 204, 0.2);
+  --button-shadow-hover: 0 4px 20px rgba(0, 153, 204, 0.3);
+
+  /* Scrollbar */
+  --scrollbar-track: #e0e0e0;
+  --scrollbar-thumb: #0099cc;
+  --scrollbar-thumb-hover: #007399;
+
+  /* Accent */
+  --accent-color: #0099cc;
+  --accent-glow: rgba(0, 153, 204, 0.3);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ==========================================================================
+   Theme Variables - Dark Mode
+   ========================================================================== */
+[data-theme="dark"] {
+  /* Primary Colors */
+  --color-primary: #00d4ff;
+  --color-primary-light: #66e3ff;
+  --color-primary-dark: #0099cc;
+  --color-primary-contrast: #000000;
+
+  /* Secondary Colors */
+  --color-secondary: #ff6b6b;
+  --color-secondary-light: #ff9e9e;
+  --color-secondary-dark: #cc5252;
+
+  /* Backgrounds */
+  --bg-primary: #0a1929;
+  --bg-secondary: #0d2137;
+  --bg-paper: #0d2137;
+  --bg-elevated: #132f4c;
+  --bg-hover: rgba(0, 212, 255, 0.08);
+  --bg-selected: rgba(0, 212, 255, 0.15);
+  --bg-card: #0d2137;
+  --bg-input: rgba(255, 255, 255, 0.05);
+  --bg-tooltip: rgba(19, 47, 76, 0.95);
+  --bg-modal: rgba(19, 47, 76, 0.95);
+  --bg-skeleton: rgba(255, 255, 255, 0.08);
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b0bec5;
+  --text-muted: #78909c;
+  --text-disabled: #546e7a;
+  --text-contrast: #000000;
+
+  /* Borders */
+  --border-color: rgba(0, 212, 255, 0.15);
+  --border-color-light: rgba(255, 255, 255, 0.08);
+  --border-color-focus: #00d4ff;
+
+  /* Dividers */
+  --divider-color: rgba(255, 255, 255, 0.08);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 8px 30px rgba(0, 212, 255, 0.2);
+
+  /* Status Colors */
+  --color-success: #00e676;
+  --color-success-light: #66ffa6;
+  --color-success-bg: rgba(0, 230, 118, 0.15);
+  --color-error: #ff5252;
+  --color-error-light: #ff8a80;
+  --color-error-bg: rgba(255, 82, 82, 0.15);
+  --color-warning: #ffab40;
+  --color-warning-light: #ffd180;
+  --color-warning-bg: rgba(255, 171, 64, 0.15);
+  --color-info: #40c4ff;
+  --color-info-light: #8bf6ff;
+  --color-info-bg: rgba(64, 196, 255, 0.15);
+
+  /* Trading Colors */
+  --color-profit: #00e676;
+  --color-loss: #ff5252;
+  --color-neutral: #b0bec5;
+
+  /* Chart Colors */
+  --chart-bg: #0d2137;
+  --chart-grid: rgba(255, 255, 255, 0.1);
+  --chart-axis: #8899a6;
+  --chart-text: #ffffff;
+  --chart-line-primary: #00d4ff;
+  --chart-area-fill: rgba(0, 212, 255, 0.2);
+  --chart-candle-up: #4caf50;
+  --chart-candle-down: #f44336;
+  --chart-volume: rgba(136, 132, 216, 0.5);
+
+  /* Sidebar */
+  --sidebar-bg: #0d2137;
+  --sidebar-border: rgba(0, 212, 255, 0.15);
+  --sidebar-item-hover: rgba(0, 212, 255, 0.08);
+  --sidebar-item-active: rgba(0, 212, 255, 0.15);
+
+  /* Header / Navbar */
+  --header-bg: #0d2137;
+  --header-border: rgba(0, 212, 255, 0.15);
+  --header-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+  /* Inputs */
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.2);
+  --input-border-hover: rgba(0, 212, 255, 0.5);
+  --input-border-focus: #00d4ff;
+  --input-placeholder: #78909c;
+
+  /* Buttons */
+  --button-primary-bg: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+  --button-primary-hover: linear-gradient(135deg, #66e3ff 0%, #00d4ff 100%);
+  --button-secondary-bg: transparent;
+  --button-secondary-border: #00d4ff;
+  --button-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
+  --button-shadow-hover: 0 4px 20px rgba(0, 212, 255, 0.4);
+
+  /* Scrollbar */
+  --scrollbar-track: #1e1e1e;
+  --scrollbar-thumb: #00d4ff;
+  --scrollbar-thumb-hover: #66e3ff;
+
+  /* Accent */
+  --accent-color: #00d4ff;
+  --accent-glow: rgba(0, 212, 255, 0.4);
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* ==========================================================================
+   Smooth Transitions for Theme Switch
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  transition:
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
+    color var(--transition-normal),
+    box-shadow var(--transition-normal),
+    opacity var(--transition-fast);
+}
+
+/* Exclude chart animations from theme transitions */
+.recharts-surface,
+.recharts-surface * {
+  transition: none !important;
+}
+
+/* ==========================================================================
+   Scrollbar Styling
+   ========================================================================== */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* ==========================================================================
+   Selection Styling
+   ========================================================================== */
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+::-moz-selection {
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+/* ==========================================================================
+   MUI Component Overrides with CSS Variables
+   ========================================================================== */
+
+/* Cards */
+.MuiCard-root {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal) !important;
+}
+
+.MuiCard-root:hover {
+  box-shadow: var(--shadow-hover) !important;
+}
+
+/* Paper */
+.MuiPaper-root {
+  background-color: var(--bg-paper) !important;
+  color: var(--text-primary) !important;
+}
+
+/* AppBar / Header */
+.MuiAppBar-root {
+  background-color: var(--header-bg) !important;
+  border-bottom: 1px solid var(--header-border) !important;
+  box-shadow: var(--header-shadow) !important;
+}
+
+/* Drawer / Sidebar */
+.MuiDrawer-paper {
+  background-color: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--sidebar-border) !important;
+}
+
+/* Text Fields & Inputs */
+.MuiOutlinedInput-root {
+  background-color: var(--input-bg);
+}
+
+.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--input-border);
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--input-border-hover);
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--input-border-focus) !important;
+}
+
+.MuiInputBase-input {
+  color: var(--text-primary) !important;
+}
+
+.MuiInputBase-input::placeholder {
+  color: var(--input-placeholder) !important;
+  opacity: 1;
+}
+
+.MuiInputLabel-root {
+  color: var(--text-secondary) !important;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: var(--color-primary) !important;
+}
+
+/* Buttons */
+.MuiButton-contained {
+  box-shadow: var(--button-shadow) !important;
+}
+
+.MuiButton-contained:hover {
+  box-shadow: var(--button-shadow-hover) !important;
+}
+
+/* Dividers */
+.MuiDivider-root {
+  border-color: var(--divider-color) !important;
+}
+
+/* Table Cells */
+.MuiTableCell-root {
+  border-bottom-color: var(--divider-color) !important;
+  color: var(--text-primary);
+}
+
+.MuiTableCell-head {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Tooltips */
+.MuiTooltip-tooltip {
+  background-color: var(--bg-tooltip) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+/* Menu Items */
+.MuiMenu-paper {
+  background-color: var(--bg-modal) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.MuiMenuItem-root {
+  color: var(--text-primary) !important;
+}
+
+.MuiMenuItem-root:hover {
+  background-color: var(--bg-hover) !important;
+}
+
+.MuiMenuItem-root.Mui-selected {
+  background-color: var(--bg-selected) !important;
+}
+
+/* List Items */
+.MuiListItemButton-root:hover {
+  background-color: var(--bg-hover) !important;
+}
+
+.MuiListItemButton-root.Mui-selected {
+  background-color: var(--bg-selected) !important;
+}
+
+/* Chips */
+.MuiChip-root {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.MuiChip-outlined {
+  border-color: var(--border-color);
+}
+
+/* Skeleton Loader */
+.MuiSkeleton-root {
+  background-color: var(--bg-skeleton) !important;
+}
+
+/* Alerts */
+.MuiAlert-root {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.MuiAlert-standardSuccess {
+  background-color: var(--color-success-bg) !important;
+}
+
+.MuiAlert-standardError {
+  background-color: var(--color-error-bg) !important;
+}
+
+.MuiAlert-standardWarning {
+  background-color: var(--color-warning-bg) !important;
+}
+
+.MuiAlert-standardInfo {
+  background-color: var(--color-info-bg) !important;
+}
+
+/* Dialogs */
+.MuiDialog-paper {
+  background-color: var(--bg-modal) !important;
+  border: 1px solid var(--border-color);
+}
+
+/* Tabs */
+.MuiTab-root {
+  color: var(--text-secondary) !important;
+}
+
+.MuiTab-root.Mui-selected {
+  color: var(--color-primary) !important;
+}
+
+/* Switches */
+.MuiSwitch-track {
+  background-color: var(--text-disabled) !important;
+}
+
+.MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: var(--color-primary) !important;
+}
+
+/* Icons */
+.MuiSvgIcon-root {
+  color: inherit;
+}
+
+/* Typography */
+.MuiTypography-root {
+  color: inherit;
+}
+
+/* Select */
+.MuiSelect-select {
+  background-color: transparent !important;
+}
+
+.MuiSelect-icon {
+  color: var(--text-secondary);
+}
+
+/* Slider */
+.MuiSlider-track, .MuiSlider-thumb {
+  background-color: var(--color-primary);
+}
+
+.MuiSlider-rail {
+  background-color: var(--text-disabled);
+}
+
+/* ==========================================================================
+   Chart Styling with CSS Variables
+   ========================================================================== */
+.recharts-wrapper {
+  background-color: transparent;
+}
+
+.recharts-cartesian-grid line {
+  stroke: var(--chart-grid) !important;
+}
+
+.recharts-text {
+  fill: var(--chart-text) !important;
+}
+
+.recharts-legend-item-text {
+  color: var(--text-primary) !important;
+}
+
+.recharts-default-tooltip {
+  background-color: var(--bg-tooltip) !important;
+  border: 1px solid var(--color-primary) !important;
+  border-radius: var(--border-radius-sm) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--color-primary) !important;
+}
+
+.recharts-tooltip-item {
+  color: var(--text-primary) !important;
+}
+
+/* ==========================================================================
+   Trading-Specific Styles
+   ========================================================================== */
+.price-up,
+.profit {
+  color: var(--color-profit) !important;
+}
+
+.price-down,
+.loss {
+  color: var(--color-loss) !important;
+}
+
+.price-neutral {
+  color: var(--color-neutral) !important;
+}
+
+/* ==========================================================================
+   Animation Keyframes
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ==========================================================================
+   Skeleton Loading Animation
+   ========================================================================== */
+.skeleton,
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-skeleton) 25%,
+    rgba(var(--color-primary), 0.1) 50%,
+    var(--bg-skeleton) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ==========================================================================
+   Glass Effect
+   ========================================================================== */
+.glass-effect {
+  background: var(--bg-modal);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   Gradient Text
+   ========================================================================== */
+.gradient-text {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==========================================================================
+   Page Transition Animations
+   ========================================================================== */
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity var(--transition-normal);
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
+@media (max-width: 600px) {
+  .MuiContainer-root {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.25rem !important;
+  }
+
+  h3 {
+    font-size: 1.1rem !important;
+  }
+
+  h4 {
+    font-size: 1rem !important;
+  }
+
+  /* Mobile Cards */
+  .MuiCard-root,
+  .MuiPaper-root {
+    border-radius: 8px !important;
+  }
+
+  /* Mobile Table Adjustments */
+  .MuiTableCell-root {
+    padding: 8px 6px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .MuiTableCell-head {
+    font-size: 0.7rem !important;
+    font-weight: 600 !important;
+  }
+
+  /* Mobile Button Adjustments */
+  .MuiButton-root {
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Mobile Dialog */
+  .MuiDialog-paper {
+    margin: 8px !important;
+    max-height: calc(100% - 16px) !important;
+  }
+
+  /* Mobile Chip */
+  .MuiChip-root {
+    height: 24px !important;
+    font-size: 0.7rem !important;
+  }
+
+  /* Mobile Tab */
+  .MuiTab-root {
+    min-width: auto !important;
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Mobile Alert */
+  .MuiAlert-root {
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Tablet Breakpoint */
+@media (min-width: 601px) and (max-width: 900px) {
+  .MuiContainer-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .MuiIconButton-root {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+
+  .MuiListItemButton-root {
+    min-height: 48px !important;
+  }
+
+  /* Remove hover effects on touch */
+  .MuiButton-root:hover,
+  .MuiIconButton-root:hover {
+    background-color: transparent !important;
+  }
+}
+
+/* ==========================================================================
+   Accessibility - Reduced Motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   High Contrast Mode
+   ========================================================================== */
+@media (prefers-contrast: high) {
+  :root {
+    --color-primary: #00d4ff;
+    --color-secondary: #ff6b6b;
+    --border-color: currentColor;
+  }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+}

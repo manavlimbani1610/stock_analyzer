@@ -1,0 +1,185 @@
+# Stock Analyzer - Production Docker Compose
+# Run with: docker-compose up --build
+
+services:
+  # ===========================================
+  # Frontend Service (React + Nginx)
+  # ===========================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:8000}
+        - REACT_APP_ML_API_URL=${REACT_APP_ML_API_URL:-http://localhost:5001}
+        - REACT_APP_ENVIRONMENT=${ENVIRONMENT:-production}
+    container_name: stock-analyzer-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+    networks:
+      - stock-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ===========================================
+  # Backend API Service (FastAPI)
+  # ===========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stock-analyzer-backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3000}
+      - ML_SERVICE_URL=http://ml-service:5001
+      - FINNHUB_API_KEY=${FINNHUB_API_KEY}
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+      - REDIS_HOST=${REDIS_HOST:-redis}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - DATABASE_URL=mysql+pymysql://${MYSQL_USER:-stockuser}:${MYSQL_PASSWORD:-stockpassword}@mysql:3306/${MYSQL_DATABASE:-stock_analyzer}
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=${MYSQL_USER:-stockuser}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-stockpassword}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-stock_analyzer}
+    depends_on:
+      - redis
+      - mysql
+    networks:
+      - stock-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+  # ===========================================
+  # MySQL Database
+  # ===========================================
+  mysql:
+    image: mysql:8.0
+    container_name: stock-analyzer-mysql
+    ports:
+      - "${MYSQL_PORT:-3307}:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpassword}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-stock_analyzer}
+      - MYSQL_USER=${MYSQL_USER:-stockuser}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-stockpassword}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./infra/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - stock-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    command: --default-authentication-plugin=mysql_native_password
+
+  # ===========================================
+  # phpMyAdmin (Optional - for DB management)
+  # ===========================================
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: stock-analyzer-phpmyadmin
+    ports:
+      - "${PHPMYADMIN_PORT:-8080}:80"
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=${MYSQL_USER:-stockuser}
+      - PMA_PASSWORD=${MYSQL_PASSWORD:-stockpassword}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - stock-network
+    restart: unless-stopped
+
+  # ===========================================
+  # ML Service (Flask + Prediction Models)
+  # ===========================================
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: stock-analyzer-ml
+    ports:
+      - "${ML_SERVICE_PORT:-5001}:5001"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - MODELS_DIR=/app/trained_models
+      - SEQUENCE_LENGTH=${SEQUENCE_LENGTH:-60}
+      - USE_LSTM=${USE_LSTM:-false}
+    volumes:
+      - ml-models:/app/trained_models
+    networks:
+      - stock-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ===========================================
+  # Redis Cache (Optional)
+  # ===========================================
+  redis:
+    image: redis:7-alpine
+    container_name: stock-analyzer-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    networks:
+      - stock-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ===========================================
+# Networks
+# ===========================================
+networks:
+  stock-network:
+    driver: bridge
+    name: stock-analyzer-network
+
+# ===========================================
+# Volumes
+# ===========================================
+volumes:
+  ml-models:
+    name: stock-analyzer-ml-models
+  redis-data:
+    name: stock-analyzer-redis-data
+  mysql-data:
+    name: stock-analyzer-mysql-data
